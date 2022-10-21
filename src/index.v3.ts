@@ -4,7 +4,7 @@ export const runCalculation = () => {
   const start = performance.now();
 
   // Read file into string
-  const wordsString = fs.readFileSync('./src/words_alpha.txt', {
+  const wordsString = fs.readFileSync('./src/words_alpha_test.txt', {
     encoding: 'utf-8',
   });
 
@@ -22,46 +22,42 @@ export const runCalculation = () => {
     }
   });
 
-  fs.writeFileSync('filtered.txt', filteredWords.join('\n'));
+  // Filter for anagrams
+  // const anagramFilteredWords = filterAnagrams(filteredWords);
+  const anagramFilteredWords = filteredWords;
 
-  console.log(`${filteredWords.length} values to search`);
+  fs.writeFileSync('filtered.txt', anagramFilteredWords.join('\n'));
 
-  let current = 0;
-
-  const updateProgress = () => {
-    console.log(`Current progress: ${current}`);
-  };
+  console.log(`${anagramFilteredWords.length} values to search`);
 
   const solution = [];
 
-  filteredWords.some((w1) => {
-    const filteredWordsList = [...filteredWords];
+  let current = 0;
 
-    return filteredWordsList.some((w2, i2) => {
-      // Increase progress counter
+  anagramFilteredWords.some((w1) => {
+    current++;
+
+    return anagramFilteredWords.some((w2, i2) => {
       current++;
+      if (w1 === 'ambry' && w2 === 'fldxt') {
+        console.log('solution:', w1, w2);
+      }
+      // Increase progress counter
       if (!hasNoRepeatingChars(w1, w2)) {
-        // Delete faulty value
-        filteredWordsList.splice(i2, 1);
       } else {
+        console.log(current);
         // Search for next word
-        // updateProgress();
-        return filteredWordsList.some((w3, i3) => {
+        return anagramFilteredWords.some((w3, i3) => {
           current++;
           if (!hasNoRepeatingChars(w1, w2, w3)) {
-            // Delete faulty value
-            filteredWordsList.splice(i3, 1);
           } else {
             // Search for next word
-            return filteredWordsList.some((w4, i4) => {
+            return anagramFilteredWords.some((w4, i4) => {
               current++;
               if (!hasNoRepeatingChars(w1, w2, w3, w4)) {
-                // Delete faulty value
-                filteredWordsList.splice(i4, 1);
               } else {
                 // Search for next word
-                return filteredWordsList.some((w5) => {
-                  console.log(w1, w2, w3, w4, w5);
+                return anagramFilteredWords.some((w5) => {
                   current++;
                   if (hasNoRepeatingChars(w1, w2, w3, w4, w5)) {
                     console.log('solution:', w1, w2, w3, w4, w5);
@@ -81,6 +77,28 @@ export const runCalculation = () => {
 
   const end = performance.now();
   return end - start;
+};
+
+const filterAnagrams = (stringArray: string[]) => {
+  const newArray = [];
+  stringArray
+    .map((element) => element.split('').sort())
+    .forEach((element) => {
+      if (element.join('') === 'spung') {
+        console.log(element);
+      }
+      if (!newArray.includes(element.join(''))) {
+        newArray.push(element.join(''));
+      }
+    });
+  return newArray
+    .map((element) => {
+      const findMatch = stringArray.find((string) => {
+        if (string.split('').sort().join('') === element) return string;
+      });
+      return findMatch;
+    })
+    .sort();
 };
 
 /**
