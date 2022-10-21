@@ -1,0 +1,20 @@
+{
+  "name": "fiveletterword",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.v2.ts --outfile=dist/index.js",
+    "run": "pnpm run build && node ./benchmark/run.js",
+    "dev": "pnpm run build && pnpm run run",
+    "benchmark": "node ./benchmark/benchmark.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.3",
+    "esbuild": "^0.15.12"
+  }
+}
